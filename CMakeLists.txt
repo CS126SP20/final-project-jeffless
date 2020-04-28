@@ -87,14 +87,3 @@ if(NOT catch2_POPULATED)
 endif()
 
 # Add more CMake libraries here ...
-FetchContent_Declare(
-        firebase
-        GIT_REPOSITORY https://github.com/firebase/firebase-cpp-sdk.git
-        GIT_TAG        v6.11.0
-)
-
-FetchContent_GetProperties(firebase)
-if(NOT firebase_POPULATED)
-    FetchContent_Populate(firebase)
-    add_subdirectory(${firebase_SOURCE_DIR} ${firebase_BINARY_DIR})
-endif()
