@@ -4,19 +4,19 @@
 #define FINALPROJECT_SEGMENT_H
 
 #include <vector>
+#include <cinder/app/App.h>
 
-#include "point.h"
 
 namespace drawing {
 
 class Segment {
  public:
   explicit Segment(size_t color);
-  void AddPoint(size_t x, size_t y);
-  std::vector<Point> GetPoints() const;
+  void AddPoint(cinder::vec2 point);
+  std::vector<cinder::vec2> GetPoints() const;
   size_t GetColor() const;
  private:
-  std::vector<Point> points_;
+  std::vector<cinder::vec2> points_;
   size_t color_;
 };
 
