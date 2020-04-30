@@ -23,6 +23,12 @@ ci_make_library(
         BLOCKS
 )
 
+find_package(mongocxx REQUIRED)
+target_link_libraries(drawing mongo::mongocxx_shared)
+
+find_package(bsoncxx REQUIRED)
+target_link_libraries(drawing mongo::bsoncxx_shared)
+
 # All users of this library will need at least C++14
 target_compile_features(drawing PUBLIC cxx_std_14)
 

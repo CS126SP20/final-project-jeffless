@@ -16,6 +16,12 @@ ci_make_app(
     BLOCKS
 )
 
+find_package(mongocxx REQUIRED)
+target_link_libraries(cinder-myapp mongo::mongocxx_shared)
+
+find_package(bsoncxx REQUIRED)
+target_link_libraries(cinder-myapp mongo::bsoncxx_shared)
+
 target_compile_features(cinder-myapp PRIVATE cxx_std_14)
 
 # Cross-platform compiler lints
