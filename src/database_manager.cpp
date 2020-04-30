@@ -36,39 +36,25 @@ void DatabaseManager::OpenBoard(const std::string& board_id) {
 void DatabaseManager::InsertSegment(const Segment& segment) {
   auto boards = client_["drawings"]["boards"];
 
-  document databuilder{};
-  auto arrayBuilder = databuilder
-      << "playload" << open_document
+  document segment_object{};
+  segment_object << "user_id" << user_id_;
 
+  auto points = segment_object << "points" << open_array;
+  for (const cinder::vec2& point : segment.GetPoints()) {
+    document point_object{};
+    point_object << "x" << point.x;
+    point_object << "y" << point.y;
+    points << point_object;
+  }
+  points << close_array;
 
   document filter;
   filter << "board_id" << board_id_;
 
-  /*document update;
-  update << "$push" << open_document << "segments" << open_document << "$each"
-  <<arr.view() << close_document << close_document;
-
-  boards.update_one(filter.view(), update.view());*/
-
-  /*document filter;
-  filter << "board_id" << board_id_;
-
-  document update;
-  update << "$set" << open_document;
-
-  update << "segments" << open_array;
-
-  for (const cinder::vec2& point : segment.GetPoints()) {
-    update << open_document;
-    update << "user_id" << user_id_;
-    array << "x" << point.x;
-    array << "y" << point.y;
-    //array << close_document;
-  }
-
-  array << close_array;
-  update << close_document;
-  boards.update_one(filter.view(), update.view());*/
+  document update{};
+  update << "$push" << open_document << "segments" << segment_object
+         << close_document;
+  boards.update_one(filter.view(), update.view());
 }
 
 }  // namespace drawing
