@@ -5,10 +5,12 @@
 
 #include <cinder/app/App.h>
 
-#include "drawing/segment.h"
 #include "drawing/database_manager.h"
+#include "drawing/segment.h"
 
 namespace myapp {
+
+enum class ProgramState { kLogin, kDrawing };
 
 class MyApp : public cinder::app::App {
  public:
@@ -21,11 +23,15 @@ class MyApp : public cinder::app::App {
   void mouseDrag(cinder::app::MouseEvent event) override;
 
  private:
-  drawing::DatabaseManager database_;
+  ProgramState state_;
+
+  drawing::DatabaseManager *database_;
+  char board_[32];
+  char name_[32];
 
   std::vector<drawing::Segment *> segments_;
   drawing::Segment *current_segment_;
-  ci::Color color_;
+  ci::Color color_ = ci::Color::white();
 };
 
 }  // namespace myapp
