@@ -2,34 +2,32 @@
 
 #include "my_app.h"
 
-#include <bsoncxx/builder/stream/document.hpp>
-#include <bsoncxx/json.hpp>
-#include <map>
-#include <mongocxx/client.hpp>
-#include <mongocxx/instance.hpp>
-#include <mongocxx/stdx.hpp>
-#include <mongocxx/uri.hpp>
-
-#include "cinder/app/RendererGl.h"
+#include "cinder/CinderImGui.h"
 #include "cinder/gl/gl.h"
 
 namespace myapp {
 
 using cinder::app::KeyEvent;
 
-MyApp::MyApp() : database_("jeff"){
-}
+MyApp::MyApp() : database_("jeff") {}
 
 void MyApp::setup() {
-  database_.OpenBoard("testing");
+  database_.OpenBoard("testing2");
+  ImGui::Initialize();
 }
 
-void MyApp::update() {}
+void MyApp::update() {
+  ImGui::Begin("Color Picker");
+  ImGui::Separator();
+  ImGui::ColorEdit3("Color", &color_);
+  ImGui::SetWindowFontScale(1.8);
+  ImGui::End();
+}
 
 void MyApp::draw() {
   cinder::gl::clear(ci::Color::gray(0.1f));
 
-  ci::gl::color(1.0f, 0.5f, 0.25f);
+  ci::gl::color(color_);
 
   for (const drawing::Segment *segment : segments_) {
     cinder::gl::begin(GL_LINE_STRIP);
@@ -45,7 +43,9 @@ void MyApp::mouseDown(cinder::app::MouseEvent event) {
   segments_.push_back(current_segment_);
 }
 void MyApp::mouseUp(cinder::app::MouseEvent event) {
-  database_.InsertSegment(*current_segment_);
+  if (!segments_.empty()) {
+    database_.InsertSegment(*current_segment_);
+  }
 }
 
 void MyApp::mouseDrag(cinder::app::MouseEvent event) {

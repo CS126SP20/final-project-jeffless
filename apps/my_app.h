@@ -25,6 +25,7 @@ class MyApp : public cinder::app::App {
 
   std::vector<drawing::Segment *> segments_;
   drawing::Segment *current_segment_;
+  ci::Color color_;
 };
 
 }  // namespace myapp
