@@ -3,21 +3,22 @@
 #ifndef FINALPROJECT_SEGMENT_H
 #define FINALPROJECT_SEGMENT_H
 
-#include <vector>
 #include <cinder/app/App.h>
 
+#include <vector>
 
 namespace drawing {
 
 class Segment {
  public:
-  explicit Segment(size_t color);
-  void AddPoint(cinder::vec2 point);
-  std::vector<cinder::vec2> GetPoints() const;
-  size_t GetColor() const;
+  explicit Segment(const ci::Color& color);
+  void AddPoint(const cinder::vec2& point);
+  auto GetPoints() const -> std::vector<cinder::vec2>;
+  auto GetColor() const -> ci::Color;
+
  private:
   std::vector<cinder::vec2> points_;
-  size_t color_;
+  ci::Color color_;
 };
 
 }  // namespace drawing

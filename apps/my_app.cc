@@ -27,9 +27,8 @@ void MyApp::update() {
 void MyApp::draw() {
   cinder::gl::clear(ci::Color::gray(0.1f));
 
-  ci::gl::color(color_);
-
   for (const drawing::Segment *segment : segments_) {
+    ci::gl::color(segment->GetColor());
     cinder::gl::begin(GL_LINE_STRIP);
     for (const cinder::vec2 &point : segment->GetPoints()) {
       cinder::gl::vertex(point);
@@ -39,7 +38,7 @@ void MyApp::draw() {
 }
 
 void MyApp::mouseDown(cinder::app::MouseEvent event) {
-  current_segment_ = new drawing::Segment(1);
+  current_segment_ = new drawing::Segment(color_);
   segments_.push_back(current_segment_);
 }
 void MyApp::mouseUp(cinder::app::MouseEvent event) {
