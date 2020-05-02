@@ -87,4 +87,3 @@ if(NOT catch2_POPULATED)
 endif()
 
 # Add more CMake libraries here ...
-find_package(cpprestsdk REQUIRED)
