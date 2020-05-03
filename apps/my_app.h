@@ -27,7 +27,6 @@ class MyApp : public cinder::app::App {
 
   drawing::DatabaseManager *database_;
   char board_[32];
-  char name_[32];
 
   //std::vector<drawing::Segment *> segments_;
   drawing::Segment *current_segment_;

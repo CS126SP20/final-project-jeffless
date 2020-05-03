@@ -18,13 +18,12 @@ namespace drawing {
 
 class DatabaseManager {
  public:
-  explicit DatabaseManager(const std::string& user_id);
+  DatabaseManager();
   void OpenBoard(const std::string& board_id);
   void InsertSegment(const Segment& segment);
   auto RetrieveSegments() -> std::vector<Segment>;
  private:
   mongocxx::client client_;
-  std::string user_id_;
   std::string board_id_;
 };
 

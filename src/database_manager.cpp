@@ -16,9 +16,7 @@ using bsoncxx::builder::stream::finalize;
 using bsoncxx::builder::stream::open_array;
 using bsoncxx::builder::stream::open_document;
 
-DatabaseManager::DatabaseManager(const std::string& user_id) {
-  user_id_ = user_id;
-
+DatabaseManager::DatabaseManager() {
   mongocxx::instance instance{};
   mongocxx::uri uri("mongodb://localhost:27017");
   client_ = mongocxx::client(uri);

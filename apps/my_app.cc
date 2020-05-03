@@ -15,10 +15,9 @@ void MyApp::update() {
   if (state_ == ProgramState::kLogin) {
     ImGui::Begin("Login");
     ImGui::InputText("Board Name", board_, IM_ARRAYSIZE(board_));
-    ImGui::InputText("User ID", name_, IM_ARRAYSIZE(name_));
     if (ImGui::Button("Start")) {
       state_ = ProgramState::kDrawing;
-      database_ = new drawing::DatabaseManager(name_);
+      database_ = new drawing::DatabaseManager();
       database_->OpenBoard(board_);
     }
     ImGui::SetWindowFontScale(2.6f);
