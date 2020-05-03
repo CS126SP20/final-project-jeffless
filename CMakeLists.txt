@@ -38,7 +38,7 @@ if("{CMAKE_C_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang"
     set(CMAKE_CXX_FLAGS "-fprofile-instr-generate -fcoverage-mapping")
 elseif(CMAKE_COMPILER_IS_GNUCXX)
     message("Building with lcov Code Coverage Tools")
-    set(CMAKE_CXX_FLAGS "--coverage")
+    set(CMAKE_CXX_FLAGS "-lgcov --coverage")
 endif()
 
 # Docs only available if this is the main app

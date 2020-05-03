@@ -10,6 +10,7 @@
 #include <mongocxx/instance.hpp>
 #include <mongocxx/stdx.hpp>
 #include <mongocxx/uri.hpp>
+#include <vector>
 
 #include "segment.h"
 
@@ -20,6 +21,7 @@ class DatabaseManager {
   explicit DatabaseManager(const std::string& user_id);
   void OpenBoard(const std::string& board_id);
   void InsertSegment(const Segment& segment);
+  auto RetrieveSegments() -> std::vector<Segment>;
  private:
   mongocxx::client client_;
   std::string user_id_;

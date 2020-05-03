@@ -37,7 +37,12 @@ void DatabaseManager::InsertSegment(const Segment& segment) {
   auto boards = client_["drawings"]["boards"];
 
   document segment_object{};
-  segment_object << "user_id" << user_id_;
+
+  document color_object{};
+  color_object << "r" << segment.GetColor().r;
+  color_object << "g" << segment.GetColor().g;
+  color_object << "b" << segment.GetColor().b;
+  segment_object << "color" << color_object;
 
   auto points = segment_object << "points" << open_array;
   for (const cinder::vec2& point : segment.GetPoints()) {
@@ -55,6 +60,37 @@ void DatabaseManager::InsertSegment(const Segment& segment) {
   update << "$push" << open_document << "segments" << segment_object
          << close_document;
   boards.update_one(filter.view(), update.view());
+}
+
+auto DatabaseManager::RetrieveSegments() -> std::vector<Segment> {
+  auto boards = client_["drawings"]["boards"];
+
+  bsoncxx::stdx::optional<bsoncxx::document::value> current_board =
+      boards.find_one(document{} << "board_id" << board_id_ << finalize);
+
+  bsoncxx::document::view board_view = current_board->view();
+  bsoncxx::array::view segments_view = board_view["segments"].get_array();
+
+  std::vector<Segment> segments;
+  for (const bsoncxx::array::element& segment_element : segments_view) {
+    bsoncxx::document::element color = segment_element["color"];
+    double r = color["r"].get_double();
+    double g = color["g"].get_double();
+    double b = color["b"].get_double();
+
+    Segment segment(cinder::Color(r, g, b));
+
+    bsoncxx::array::view points_view = segment_element["points"].get_array();
+    for (const bsoncxx::array::element& point_element : points_view) {
+      double x = point_element["x"].get_double();
+      double y = point_element["y"].get_double();
+
+      segment.AddPoint(cinder::vec2(x, y));
+    }
+    segments.push_back(segment);
+  }
+
+  return segments;
 }
 
 }  // namespace drawing

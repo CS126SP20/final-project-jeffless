@@ -29,7 +29,7 @@ class MyApp : public cinder::app::App {
   char board_[32];
   char name_[32];
 
-  std::vector<drawing::Segment *> segments_;
+  //std::vector<drawing::Segment *> segments_;
   drawing::Segment *current_segment_;
   ci::Color color_ = ci::Color::white();
 };

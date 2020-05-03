@@ -32,14 +32,13 @@ void MyApp::update() {
 }
 
 void MyApp::draw() {
+  cinder::gl::clear(ci::Color::gray(0.1f));
   if (state_ == ProgramState::kLogin) {
   } else {
-    cinder::gl::clear(ci::Color::gray(0.1f));
-
-    for (const drawing::Segment *segment : segments_) {
-      ci::gl::color(segment->GetColor());
+    for (const drawing::Segment& segment : database_->RetrieveSegments()) {
+      ci::gl::color(segment.GetColor());
       cinder::gl::begin(GL_LINE_STRIP);
-      for (const cinder::vec2 &point : segment->GetPoints()) {
+      for (const cinder::vec2 &point : segment.GetPoints()) {
         cinder::gl::vertex(point);
       }
       cinder::gl::end();
@@ -50,12 +49,11 @@ void MyApp::draw() {
 void MyApp::mouseDown(cinder::app::MouseEvent event) {
   if (state_ == ProgramState::kDrawing) {
     current_segment_ = new drawing::Segment(color_);
-    segments_.push_back(current_segment_);
   }
 }
 
 void MyApp::mouseUp(cinder::app::MouseEvent event) {
-  if (state_ == ProgramState::kDrawing && !segments_.empty()) {
+  if (state_ == ProgramState::kDrawing) {
     database_->InsertSegment(*current_segment_);
   }
 }
