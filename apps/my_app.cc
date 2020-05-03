@@ -53,7 +53,7 @@ void MyApp::mouseDown(cinder::app::MouseEvent event) {
 }
 
 void MyApp::mouseUp(cinder::app::MouseEvent event) {
-  if (state_ == ProgramState::kDrawing) {
+  if (state_ == ProgramState::kDrawing && current_segment_ != nullptr) {
     database_->InsertSegment(*current_segment_);
   }
 }
