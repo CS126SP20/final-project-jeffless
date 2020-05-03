@@ -18,7 +18,7 @@ void MyApp::update() {
     ImGui::InputText("User ID", name_, IM_ARRAYSIZE(name_));
     if (ImGui::Button("Start")) {
       state_ = ProgramState::kDrawing;
-      database_  = new drawing::DatabaseManager(name_);
+      database_ = new drawing::DatabaseManager(name_);
       database_->OpenBoard(board_);
     }
     ImGui::SetWindowFontScale(2.6f);
@@ -35,10 +35,17 @@ void MyApp::draw() {
   cinder::gl::clear(ci::Color::gray(0.1f));
   if (state_ == ProgramState::kLogin) {
   } else {
-    for (const drawing::Segment& segment : database_->RetrieveSegments()) {
+    std::vector<drawing::Segment> segments = database_->RetrieveSegments();
+
+    // Render current segment so the user can view it as it is being drawn
+    if (current_segment_ != nullptr) {
+      segments.push_back(*current_segment_);
+    }
+
+    for (const drawing::Segment& segment : segments) {
       ci::gl::color(segment.GetColor());
       cinder::gl::begin(GL_LINE_STRIP);
-      for (const cinder::vec2 &point : segment.GetPoints()) {
+      for (const cinder::vec2& point : segment.GetPoints()) {
         cinder::gl::vertex(point);
       }
       cinder::gl::end();
