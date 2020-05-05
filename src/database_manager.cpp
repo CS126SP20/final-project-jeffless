@@ -61,15 +61,24 @@ void DatabaseManager::InsertSegment(const Segment& segment) {
 }
 
 auto DatabaseManager::RetrieveSegments() -> std::vector<Segment> {
+  using bsoncxx::builder::basic::kvp;
+  using bsoncxx::builder::basic::make_document;
+
   auto boards = client_["drawings"]["boards"];
+
+  std::vector<Segment> segments;
 
   bsoncxx::stdx::optional<bsoncxx::document::value> current_board =
       boards.find_one(document{} << "board_id" << board_id_ << finalize);
 
   bsoncxx::document::view board_view = current_board->view();
+
+  if (!board_view["segments"].operator bool()) {
+    return segments;
+  }
+
   bsoncxx::array::view segments_view = board_view["segments"].get_array();
 
-  std::vector<Segment> segments;
   for (const bsoncxx::array::element& segment_element : segments_view) {
     bsoncxx::document::element color = segment_element["color"];
     double r = color["r"].get_double();
