@@ -5,9 +5,12 @@
 
 #include <cinder/app/App.h>
 
+#include <bsoncxx/builder/stream/document.hpp>
 #include <vector>
 
 namespace drawing {
+
+using bsoncxx::builder::stream::document;
 
 class Segment {
  public:
@@ -20,6 +23,10 @@ class Segment {
   std::vector<cinder::vec2> points_;
   ci::Color color_;
 };
+
+auto DeserializeSegment(const bsoncxx::array::element& segment_element)
+    -> Segment;
+auto SerializeSegment(const Segment& segment) -> document;
 
 }  // namespace drawing
 
