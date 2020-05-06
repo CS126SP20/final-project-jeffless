@@ -27,6 +27,9 @@ class DatabaseManager {
   // Deserialize all of the segments in the current board into a vector
   auto RetrieveSegments() -> std::vector<Segment>;
 
+  // Retrieve all of the board ids
+  auto RetrieveBoardIds() -> std::vector<std::string>;
+
  private:
   mongocxx::client client_;
   std::string board_id_;

@@ -43,6 +43,14 @@ void MyApp::update() {
       current_segment_ = nullptr;
     }
 
+    // Dynamically generate buttons for each board in the database
+    for (const auto& board_item : database_->RetrieveBoardIds()) {
+      if (ImGui::Button(board_item.c_str())) {
+        database_->OpenBoard(board_item);
+        current_segment_ = nullptr;
+      }
+    }
+
     ImGui::SetWindowFontScale(kScaleFactor);
     ImGui::End();
   }
@@ -53,7 +61,8 @@ void MyApp::draw() {
   if (state_ == ProgramState::kDrawing) {
     std::vector<drawing::Segment> segments = database_->RetrieveSegments();
 
-    // Render current segment so the user can view it as it is being drawn
+    // Render current segment so the user can view it as it is being drawn, but
+    // do not insert into database as it is not complete
     if (current_segment_ != nullptr) {
       segments.push_back(*current_segment_);
     }

@@ -23,10 +23,15 @@ void DatabaseManager::OpenBoard(const std::string& board_id) {
 
   auto boards = client_["drawings"]["boards"];
 
+  bsoncxx::stdx::optional<bsoncxx::document::value> current_board =
+      boards.find_one(document{} << "board_id" << board_id_ << finalize);
+
   // Create and insert board document with board_id if it doesn't already exist
-  document document{};
-  document << "board_id" << board_id;
-  boards.insert_one(document.view());
+  if (!current_board) {
+    document document{};
+    document << "board_id" << board_id;
+    boards.insert_one(document.view());
+  }
 }
 
 void DatabaseManager::InsertSegment(const Segment& segment) {
@@ -69,6 +74,17 @@ auto DatabaseManager::RetrieveSegments() -> std::vector<Segment> {
   }
 
   return segments;
+}
+auto DatabaseManager::RetrieveBoardIds() -> std::vector<std::string> {
+  auto boards = client_["drawings"]["boards"];
+  std::vector<std::string> result;
+  mongocxx::cursor cursor = boards.find({});
+  for (auto doc : cursor) {
+    auto id_view = doc["board_id"].get_utf8().value;
+    result.push_back(std::string(id_view));
+  }
+
+  return result;
 }
 
 }  // namespace drawing
