@@ -1,4 +1,4 @@
-// Copyright (c) 2020 [Your Name]. All rights reserved.
+// Copyright (c) 2020 Jeffrey Lin. All rights reserved.
 
 #include "my_app.h"
 
@@ -14,32 +14,43 @@ void MyApp::setup() { ImGui::Initialize(); }
 void MyApp::update() {
   if (state_ == ProgramState::kLogin) {
     ImGui::Begin("Login");
-    ImGui::InputText("Board Name", board_, IM_ARRAYSIZE(board_));
+
+    ImGui::InputText("Board Name", board_name_, IM_ARRAYSIZE(board_name_));
     if (ImGui::Button("Start")) {
       state_ = ProgramState::kDrawing;
       database_ = new drawing::DatabaseManager();
-      database_->OpenBoard(board_);
+      database_->OpenBoard(board_name_);
     }
-    ImGui::SetWindowFontScale(2.6f);
+
+    ImGui::SetWindowFontScale(kScaleFactor);
     ImGui::End();
   } else {
     ImGui::Begin("Color Picker");
-    ImGui::ColorEdit3("Color", &color_);
-    ImGui::SetWindowFontScale(2.6f);
+    ImGui::ColorEdit3("Color", &segment_color_);
+    ImGui::SetWindowFontScale(kScaleFactor);
     ImGui::End();
 
     ImGui::Begin("Options");
+
     if (ImGui::Button("Clear Board")) {
       database_->RemoveSegments();
+      current_segment_ = nullptr;
     }
+
+    ImGui::InputText("Board Name", board_name_, IM_ARRAYSIZE(board_name_));
+    if (ImGui::Button("Start")) {
+      database_->OpenBoard(board_name_);
+      current_segment_ = nullptr;
+    }
+
+    ImGui::SetWindowFontScale(kScaleFactor);
     ImGui::End();
   }
 }
 
 void MyApp::draw() {
   cinder::gl::clear(ci::Color::gray(0.1f));
-  if (state_ == ProgramState::kLogin) {
-  } else {
+  if (state_ == ProgramState::kDrawing) {
     std::vector<drawing::Segment> segments = database_->RetrieveSegments();
 
     // Render current segment so the user can view it as it is being drawn
@@ -60,7 +71,7 @@ void MyApp::draw() {
 
 void MyApp::mouseDown(cinder::app::MouseEvent event) {
   if (state_ == ProgramState::kDrawing) {
-    current_segment_ = new drawing::Segment(color_);
+    current_segment_ = new drawing::Segment(segment_color_);
   }
 }
 

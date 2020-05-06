@@ -10,6 +10,8 @@
 
 namespace myapp {
 
+const float kScaleFactor = 2.6f;
+
 enum class ProgramState { kLogin, kDrawing };
 
 class MyApp : public cinder::app::App {
@@ -23,14 +25,20 @@ class MyApp : public cinder::app::App {
   void mouseDrag(cinder::app::MouseEvent event) override;
 
  private:
+  // Keep track of current ProgramState
   ProgramState state_;
 
+  // Pointer to DatabaseManager so it can be created later
   drawing::DatabaseManager *database_;
-  char board_[32];
 
-  //std::vector<drawing::Segment *> segments_;
+  // Pointer to current Segment being drawn
   drawing::Segment *current_segment_;
-  ci::Color color_ = ci::Color::white();
+
+  // Object to store color stored by ImGui color picker
+  ci::Color segment_color_ = ci::Color::white();
+
+  // Object to store board id entered in login
+  char board_name_[32];
 };
 
 }  // namespace myapp
