@@ -27,6 +27,12 @@ void MyApp::update() {
     ImGui::ColorEdit3("Color", &color_);
     ImGui::SetWindowFontScale(2.6f);
     ImGui::End();
+
+    ImGui::Begin("Options");
+    if (ImGui::Button("Clear Board")) {
+      database_->RemoveSegments();
+    }
+    ImGui::End();
   }
 }
 

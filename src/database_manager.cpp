@@ -1,10 +1,8 @@
 #include "drawing/database_manager.h"
 
-#include <bsoncxx/builder/stream/array.hpp>
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/builder/stream/helpers.hpp>
 #include <bsoncxx/types.hpp>
-#include <utility>
 
 namespace drawing {
 
@@ -42,6 +40,17 @@ void DatabaseManager::InsertSegment(const Segment& segment) {
   update << "$push" << open_document << "segments" << segment_object
          << close_document;
   boards.update_one(filter.view(), update.view());
+}
+
+void DatabaseManager::RemoveSegments() {
+  using bsoncxx::builder::basic::kvp;
+  using bsoncxx::builder::basic::make_document;
+
+  auto boards = client_["drawings"]["boards"];
+
+  boards.update_one(
+      make_document(kvp("board_id", board_id_)),
+      make_document(kvp("$unset", make_document(kvp("segments", "")))));
 }
 
 auto DatabaseManager::RetrieveSegments() -> std::vector<Segment> {

@@ -1,7 +1,6 @@
 #ifndef FINALPROJECT_DATABASE_MANAGER_H
 #define FINALPROJECT_DATABASE_MANAGER_H
 
-#include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
 #include <map>
 #include <mongocxx/client.hpp>
@@ -19,6 +18,7 @@ class DatabaseManager {
   DatabaseManager();
   void OpenBoard(const std::string& board_id);
   void InsertSegment(const Segment& segment);
+  void RemoveSegments();
   auto RetrieveSegments() -> std::vector<Segment>;
  private:
   mongocxx::client client_;
