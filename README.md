@@ -3,7 +3,16 @@
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![docs](https://img.shields.io/badge/docs-yes-brightgreen)](docs/README.md)
 
-Read [this document](https://cliutils.gitlab.io/modern-cmake/chapters/basics/structure.html) to understand the project
-layout.
+## Dependencies
+ * [Cinder](https://libcinder.org/download)
+ * [mongocxx driver](http://mongocxx.org/mongocxx-v3/installation)
 
-**Author**: Anonymous - [`example@illinois.edu`](mailto:example@illinois.edu)
+
+## Run Instructions
+ * Follow [instructions](https://docs.mongodb.com/guides/server/install) to install MongoDB on your platform
+ * [Start a MongoDB instance](https://docs.mongodb.com/guides/server/install/#run-mongodb) on localhost:27017
+    * If for any reason you have to use another port, modify the `kDatabaseUri` variable in `database_manager.h`
+
+
+
+**Author**: Jeffrey Lin - [`jl108@illinois.edu`](mailto:jl108@illinois.edu)
