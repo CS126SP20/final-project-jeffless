@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Jeffrey Lin. All rights reserved.
+
 #ifndef FINALPROJECT_DATABASE_MANAGER_H
 #define FINALPROJECT_DATABASE_MANAGER_H
 

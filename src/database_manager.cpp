@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Jeffrey Lin. All rights reserved.
+
 #include "drawing/database_manager.h"
 
 #include <bsoncxx/builder/stream/document.hpp>
